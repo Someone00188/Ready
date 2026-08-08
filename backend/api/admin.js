@@ -189,6 +189,19 @@ router.post('/restore/confirm', express.json(), async (req, res) => {
   try {
     const result = await restoreBackup(filePath, { triggeredBy: req.adminId });
     fs.unlinkSync(filePath);
+
+    // MUHIM: Restore DB faylini to'g'ridan-to'g'ri yangiladi (bot va sayt bir
+    // xil chess.db'dan foydalanadi — alohida "saytga ham yozish" degan narsa
+    // yo'q). Lekin brauzerdagi ochiq sahifalar, gameManager'dagi xotiradagi
+    // holat va boshqa keshlar hali eski (restore'dan oldingi) ma'lumotni
+    // ko'rsatib turishi mumkin edi — aynan shu narsa "botda restore bo'ldi,
+    // saytda 0 ko'rinyapti" degan holatga o'xshab ko'rinishi mumkin edi.
+    // Shu sabab restore tugagach barcha ulangan clientlarga signal beramiz —
+    // frontend buni eshitib joriy sahifani (statistika/reyting/tarix)
+    // avtomatik qayta so'raydi.
+    const io = req.app.get('io');
+    if (io) io.emit('data_restored', { source: 'admin_panel', ...result });
+
     res.json({ ok: true, ...result });
   } catch (err) {
     res.status(500).json({ ok: false, error: err.message, safetyBackup: err.safetyBackup?.fileName });
