@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useTelegram } from './hooks/useTelegram';
@@ -131,6 +132,30 @@ function Gate() {
   const [status, setStatus] = useState('checking'); // checking | needs-register | ready
   const [myNickname, setMyNickname] = useState(null);
   const location = useLocation();
+
+  // Admin panel orqali backup restore qilinganda backend barcha ulangan
+  // clientlarga 'data_restored' signalini yuboradi (backend/api/admin.js).
+  // Bu paytgacha sahifa hali eski (restore'dan oldingi) so'rovlar natijasini
+  // xotirasida/state'ida ushlab turishi mumkin edi — aynan shu narsa "botda
+  // restore bo'ldi, saytda hammasi 0 ko'rinyapti" holatiga o'xshab ko'rinardi
+  // (DB o'zi to'g'ri yangilangan bo'lsa ham). Signal kelganda butun sahifani
+  // qayta yuklash — barcha keshlar/state'larni yangi DB holatiga moslashtirishning
+  // eng oddiy va ishonchli yo'li.
+  useEffect(() => {
+    let socket;
+    let cancelled = false;
+    import('socket.io-client').then(({ io }) => {
+      if (cancelled) return;
+      socket = io(BACKEND, { transports: ['polling', 'websocket'] });
+      socket.on('data_restored', () => {
+        window.location.reload();
+      });
+    });
+    return () => {
+      cancelled = true;
+      socket?.disconnect();
+    };
+  }, []);
 
   const check = useCallback(async () => {
     if (!user) return;
