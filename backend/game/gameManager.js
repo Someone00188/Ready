@@ -4,7 +4,6 @@ import * as q from '../db/queries.js';
 import { calculateELO, calculateBoth } from '../utils/ratings.js';
 import { calculatePlacementStep } from '../utils/placement.js';
 import { ratingColumn } from '../config.js';
-import { notifyGameOver } from '../utils/telegram.js';
 
 // Faol o'yinlar xotirada
 const games = new Map();
@@ -186,11 +185,6 @@ export async function finalizeGame(game) {
   } catch (err) {
     console.error('O\'yinni saqlashda xato:', err.message);
   }
-
-  // Telegram xabarlari (fon rejimida, xato bo'lsa o'yinni to'xtatmaydi)
-  notifyGameOver(game, { whiteChange, blackChange }).catch(err =>
-    console.error('Telegram xabar xatosi:', err.message)
-  );
 
   // 5 daqiqadan keyin xotiradan o'chirish (kuzatuvchilar ko'rib ulgursin)
   setTimeout(() => removeGame(id), 5 * 60_000);
