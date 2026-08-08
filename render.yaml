@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: chess-uz
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm install --legacy-peer-deps && npm run build
+    startCommand: node start-combined.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_PATH
+        value: ./chess.db
+      - key: FRONTEND_URL
+        sync: false
+      - key: BACKEND_URL
+        sync: false
+      - key: TELEGRAM_TOKEN
+        sync: false
+      - key: TELEGRAM_BOT_USERNAME
+        sync: false
+      - key: ADMIN_TELEGRAM_IDS
+        sync: false
+      - key: INTERNAL_API_SECRET
+        sync: false
+      - key: CHANNEL_USERNAME
+        sync: false
+      - key: BROADCAST_MARKER
+        value: "🎲"
+      - key: BACKUP_CHANNEL_ID
+        sync: false

@@ -1,0 +1,1170 @@
+/* ============================================================
+   MOBILE-RESPONSIVE OVERRIDES — ChessMate
+   Mobile-first, full-width, native Android feel
+   ============================================================ */
+
+/* Root variables — touch targets and spacing */
+:root {
+  --touch-min: 44px;  /* Minimum touch target */
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 20px;
+  --spacing-xl: 24px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+body {
+  font-size: 16px; /* Prevents mobile zoom on input focus */
+}
+
+/* ============================================================
+   APP CONTAINER
+   ============================================================ */
+.app {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  background: var(--bg);
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================
+   PAGES — Full width, proper padding
+   ============================================================ */
+.page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 90px; /* Space for bottom nav */
+  padding: var(--spacing-md);
+  padding-bottom: 90px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   TOPBAR — Always visible, full width
+   ============================================================ */
+.topbar {
+  width: 100%;
+  padding: var(--spacing-md);
+  margin: 0;
+  margin-bottom: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.topbar-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+  min-width: 0;
+}
+
+.topbar-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.topbar-title {
+  font-size: 20px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.back-btn {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* ============================================================
+   PROFILE HEADER (HomePage)
+   ============================================================ */
+.profile-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  padding: 0;
+}
+
+.profile-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex: 1;
+  min-width: 0;
+}
+
+.avatar-ring {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+}
+
+.profile-name {
+  font-size: 16px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-loc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.profile-right {
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   STAT STRIPS — Responsive grid
+   ============================================================ */
+.profile-stats-strip,
+.hist-stats-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  padding: 0;
+}
+
+.pstat, .hist-stat {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  text-align: center;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-height: 70px;
+  justify-content: center;
+}
+
+.pstat i, .hist-stat i {
+  font-size: 18px;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.lbl {
+  display: block;
+  font-size: 10px;
+  color: var(--text-tertiary);
+  margin-top: 4px;
+}
+
+/* ============================================================
+   ACTION CARDS (HomePage)
+   ============================================================ */
+.actions-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.action-card {
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  min-height: 120px;
+}
+
+.action-card:active {
+  transform: scale(0.95);
+  border-color: var(--accent);
+}
+
+.action-icon {
+  font-size: 32px;
+  color: var(--accent);
+}
+
+.action-label {
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.action-sub {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+/* ============================================================
+   STATS ROW (HomePage)
+   ============================================================ */
+.stats-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.stat-box {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.stat-icon {
+  font-size: 18px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-icon.games { background: var(--accent-soft); color: var(--accent); }
+.stat-icon.wins { background: rgba(124,255,57,0.15); color: var(--accent); }
+.stat-icon.losses { background: rgba(255,77,77,0.15); color: var(--red); }
+.stat-icon.streak { background: rgba(255,197,49,0.15); color: var(--yellow); }
+
+.stat-num {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.stat-lbl {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  font-weight: 600;
+}
+
+/* ============================================================
+   SECTION HEADERS
+   ============================================================ */
+.section-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: var(--spacing-lg) 0 var(--spacing-md) 0;
+  padding: 0;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
+
+.section-link {
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
+}
+
+/* ============================================================
+   CARDS — Full width, no fixed dimensions
+   ============================================================ */
+.recent-row,
+.game-row,
+.more-item,
+.detail-card,
+.detail-row,
+.friend-item,
+.more-profile-card {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  margin: 0;
+}
+
+.recent-row {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.recent-avatar-fallback {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  font-size: 14px;
+}
+
+.recent-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.recent-vs {
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recent-meta {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+
+.recent-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.recent-trophy {
+  font-size: 20px;
+}
+
+/* ============================================================
+   GAME ROW (History)
+   ============================================================ */
+.game-row {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.result-badge {
+  font-size: 18px;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.row-avatar {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.row-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.row-name {
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.row-sub {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+
+.row-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.result-tag {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--glass);
+}
+
+.result-tag.win { color: var(--accent); background: var(--accent-soft); }
+.result-tag.loss { color: var(--red); background: var(--red-soft); }
+.result-tag.draw { color: var(--yellow); background: var(--yellow-soft); }
+
+/* ============================================================
+   FRIENDS SCROLL
+   ============================================================ */
+.friends-scroll {
+  width: 100%;
+  display: flex;
+  gap: var(--spacing-md);
+  overflow-x: auto;
+  padding: var(--spacing-sm) 0;
+  margin-bottom: var(--spacing-lg);
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.friend-item {
+  width: 80px;
+  flex-shrink: 0;
+  text-align: center;
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-md);
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  scroll-snap-align: start;
+  transition: all 0.2s;
+}
+
+.friend-avatar-wrap {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto;
+}
+
+.friend-avatar-fallback {
+  width: 60px;
+  height: 60px;
+  font-size: 16px;
+}
+
+.online {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: var(--accent);
+  border-radius: 50%;
+  bottom: 0;
+  right: 0;
+  border: 2px solid var(--card);
+}
+
+.friend-name {
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.friend-rating {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.friend-add {
+  font-size: 28px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+}
+
+/* ============================================================
+   MORE PAGE ITEMS
+   ============================================================ */
+.more-profile-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.more-profile-fallback {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+}
+
+.more-profile-name {
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.more-profile-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.more-profile-arrow {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--text-tertiary);
+}
+
+/* ============================================================
+   MORE LIST ITEMS
+   ============================================================ */
+.more-list {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: var(--spacing-lg);
+}
+
+.more-item {
+  width: 100%;
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: var(--touch-min);
+}
+
+.more-item:last-child {
+  border-bottom: none;
+}
+
+.more-item:active {
+  background: var(--glass);
+}
+
+.more-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.more-label {
+  font-size: 14px;
+  font-weight: 700;
+  flex: 1;
+}
+
+.more-item > i:last-child {
+  margin-left: auto;
+  color: var(--text-tertiary);
+  font-size: 16px;
+}
+
+/* ============================================================
+   FILTER TABS
+   ============================================================ */
+.filter-tabs {
+  width: 100%;
+  display: flex;
+  gap: var(--spacing-sm);
+  overflow-x: auto;
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-sm) 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.filter-tab {
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  background: var(--glass);
+  border: 1px solid var(--card-border);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  min-height: var(--touch-min);
+}
+
+.filter-tab.active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ============================================================
+   DETAIL CARDS (Profile, Stats, Friends)
+   ============================================================ */
+.detail-card {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: 0;
+  margin-bottom: var(--spacing-lg);
+  overflow: hidden;
+}
+
+.detail-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--card-border);
+  font-size: 14px;
+  font-weight: 600;
+  gap: var(--spacing-md);
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-row-val {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ============================================================
+   BOTTOM NAV — Fixed, full width, touch-friendly
+   ============================================================ */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 80px;
+  background: var(--bg-elevated);
+  border-top: 1px solid var(--card-border-strong);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 50;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.nav-item {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  min-width: 0;
+}
+
+.nav-item.active {
+  color: var(--accent);
+}
+
+.nav-item i {
+  font-size: 22px;
+}
+
+.nav-item span {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90%;
+}
+
+/* ============================================================
+   BOARD PAGE — Full responsive board
+   ============================================================ */
+.game-page {
+  padding: var(--spacing-md);
+  padding-bottom: 100px;
+}
+
+.g-player-bar {
+  width: 100%;
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  border-radius: var(--radius-md);
+  min-height: 60px;
+}
+
+.g-player-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+  min-width: 0;
+}
+
+.g-avatar {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  font-size: 14px;
+}
+
+.g-player-name {
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.g-player-meta {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+
+.g-clock {
+  font-size: 14px;
+  font-weight: 800;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  min-width: 70px;
+  text-align: center;
+}
+
+.board-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: var(--spacing-md) 0;
+  padding: 0;
+}
+
+.board {
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 1/1;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--card-border-strong);
+}
+
+.g-moves {
+  width: 100%;
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  max-height: 120px;
+  font-size: 12px;
+}
+
+.g-status {
+  width: 100%;
+  padding: var(--spacing-sm);
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ============================================================
+   SHEET MODALS — Full width bottom sheets
+   ============================================================ */
+.sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 100;
+}
+
+.sheet-modal {
+  width: 100%;
+  max-width: 100%;
+  max-height: 90vh;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  padding: var(--spacing-md);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sheet-modal.center-modal {
+  border-radius: var(--radius-xl);
+  max-width: calc(100% - 36px);
+  margin: 0 18px 40px;
+  max-height: none;
+}
+
+.sheet-handle {
+  width: 38px;
+  height: 4px;
+  margin: 0 auto var(--spacing-md);
+}
+
+.sheet-title {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+}
+
+.sheet-controls {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.btn-secondary,
+.btn-continue {
+  flex: 1;
+  min-height: var(--touch-min);
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  min-width: 120px;
+}
+
+/* ============================================================
+   INPUTS
+   ============================================================ */
+.search-input,
+.nick-input {
+  width: 100%;
+  padding: var(--spacing-md);
+  font-size: 16px;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--spacing-md);
+  min-height: var(--touch-min);
+}
+
+/* ============================================================
+   EMPTY STATES
+   ============================================================ */
+.empty-state-mini {
+  width: 100%;
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  font-size: 13px;
+  margin-bottom: var(--spacing-md);
+}
+
+.center-loader {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================
+   STAGGER ANIMATIONS
+   ============================================================ */
+.stagger {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.stagger > * {
+  animation: slideUp 0.3s var(--ease) forwards;
+  opacity: 0;
+}
+
+.stagger > :nth-child(1) { animation-delay: 0.05s; }
+.stagger > :nth-child(2) { animation-delay: 0.1s; }
+.stagger > :nth-child(3) { animation-delay: 0.15s; }
+.stagger > :nth-child(n+4) { animation-delay: 0.2s; }
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   RIPPLE EFFECT
+   ============================================================ */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  transform: scale(0);
+  animation: ripple 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   THEME COLORS — Icon backgrounds
+   ============================================================ */
+.more-icon.i1 { background: rgba(124,255,57,0.15); color: var(--accent); }
+.more-icon.i2 { background: rgba(255,197,49,0.15); color: var(--yellow); }
+.more-icon.i3 { background: rgba(100,200,255,0.15); color: #64c8ff; }
+.more-icon.i4 { background: rgba(200,100,255,0.15); color: #c864ff; }
+.more-icon.i9 { background: rgba(255,77,77,0.15); color: var(--red); }
+.more-icon.i10 { background: rgba(124,255,57,0.15); color: var(--accent); }
+
+/* ============================================================
+   PROFILE HERO CARD
+   ============================================================ */
+.profile-hero-card {
+  width: 100%;
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.profile-hero-avatar {
+  width: 84px;
+  height: 84px;
+  margin: 0 auto var(--spacing-md);
+  font-size: 32px;
+}
+
+.profile-hero-name {
+  font-size: 18px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-hero-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* ============================================================
+   DAY DIVIDERS (History)
+   ============================================================ */
+.day-divider {
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  margin: var(--spacing-md) 0 var(--spacing-sm) 0;
+  padding: var(--spacing-sm) 0;
+}
+
+/* ============================================================
+   BOTTOM STATS CARD (History)
+   ============================================================ */
+.bottom-stats-card {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.bstat {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.bstat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.bstat-icon.fire { background: rgba(255,77,77,0.15); color: var(--red); }
+.bstat-icon.rating { background: rgba(124,255,57,0.15); color: var(--accent); }
+.bstat-icon.time { background: rgba(100,200,255,0.15); color: #64c8ff; }
+
+.bstat-num {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.bstat-lbl {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* ============================================================
+   MEDIA QUERIES — Additional tweaks for different sizes
+   ============================================================ */
+
+@media (min-width: 480px) {
+  .page {
+    padding: var(--spacing-lg);
+  }
+
+  .actions-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .stat-box {
+    font-size: 12px;
+  }
+
+  .more-list {
+    border-radius: var(--radius-lg);
+  }
+}
+
+@media (min-width: 768px) {
+  .app {
+    max-width: 430px;
+    margin: 0 auto;
+  }
+}
+
+/* Prevent zoom on input focus iOS */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+
+  .bottom-nav {
+    padding-bottom: max(0, env(safe-area-inset-bottom));
+    height: calc(80px + max(0, env(safe-area-inset-bottom)));
+  }
+
+  .page {
+    padding-bottom: calc(90px + max(0, env(safe-area-inset-bottom)));
+  }
+}
+

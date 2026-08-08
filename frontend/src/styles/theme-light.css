@@ -1,0 +1,45 @@
+/* ==========================================================================
+   LIGHT MODE — design.css dagi :root token'lariga mutanosib override.
+   Yoqilishi: <html data-theme="light">  (useTheme.js orqali boshqariladi)
+   Barcha komponentlar CSS var(--...) orqali ishlagani uchun, bu yerda faqat
+   token qiymatlarini almashtirish kifoya — boshqa hech qanday joyga tegilmadi.
+   ========================================================================== */
+:root[data-theme="light"]{
+  --bg:                 #F4F5F7;
+  --bg-elevated:         #FFFFFF;
+  --card:                #FFFFFF;
+  --card-border:          rgba(15,17,21,0.08);
+  --card-border-strong:    rgba(15,17,21,0.14);
+  --glass:                rgba(15,17,21,0.035);
+  --glass-strong:          rgba(15,17,21,0.06);
+
+  --accent:               #4CAF1F;
+  --accent-dim:            #3D9018;
+  --accent-glow:            rgba(76,175,31,0.25);
+  --accent-soft:            rgba(76,175,31,0.10);
+
+  --red:                  #E63946;
+  --red-soft:              rgba(230,57,70,0.10);
+  --yellow:                #C98A00;
+  --yellow-soft:            rgba(201,138,0,0.10);
+
+  --text-primary:         #14161C;
+  --text-secondary:       #565A63;
+  --text-tertiary:        #8A8F99;
+
+  --shadow-card:          0 8px 24px rgba(15,17,21,0.07);
+  --shadow-elevated:       0 16px 40px rgba(15,17,21,0.10);
+  --shadow-glow:            0 0 0 1px rgba(76,175,31,0.15), 0 8px 30px rgba(76,175,31,0.12);
+}
+
+:root[data-theme="light"] body{
+  background:
+    radial-gradient(circle at 15% 0%, rgba(76,175,31,0.05) 0%, transparent 45%),
+    radial-gradient(circle at 90% 20%, rgba(76,175,31,0.035) 0%, transparent 40%),
+    var(--bg);
+}
+
+/* Ba'zi joylarda tokendan tashqari qattiq oq/qora rang ishlatilgan — light rejimda
+   ham o'qilishi uchun moslashtiramiz. */
+:root[data-theme="light"] .g-avatar.w{ background:#E7E9ED; color:#111; }
+:root[data-theme="light"] .g-avatar.b{ background:#20232b; color:var(--accent); }

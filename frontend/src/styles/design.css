@@ -1,0 +1,808 @@
+/* ==========================================================================
+   1. CSS VARIABLES / DESIGN TOKENS
+   ========================================================================== */
+:root{
+  --bg:                #0A0B0F;
+  --bg-elevated:        #14161C;
+  --card:               #14161C;
+  --card-border:        rgba(255,255,255,0.06);
+  --card-border-strong:  rgba(255,255,255,0.10);
+  --glass:              rgba(255,255,255,0.04);
+  --glass-strong:        rgba(255,255,255,0.07);
+
+  --accent:              #7CFF39;
+  --accent-dim:           #5FD629;
+  --accent-glow:          rgba(124,255,57,0.35);
+  --accent-soft:          rgba(124,255,57,0.12);
+
+  --red:                 #FF4D4D;
+  --red-soft:             rgba(255,77,77,0.12);
+  --yellow:               #FFC531;
+  --yellow-soft:           rgba(255,197,49,0.12);
+
+  --text-primary:        #F5F6F8;
+  --text-secondary:      #9BA0AC;
+  --text-tertiary:       #666B77;
+
+  --radius-xl:            24px;
+  --radius-lg:             20px;
+  --radius-md:              16px;
+  --radius-sm:               12px;
+  --radius-pill:              999px;
+
+  --shadow-card:          0 8px 24px rgba(0,0,0,0.35);
+  --shadow-elevated:       0 16px 40px rgba(0,0,0,0.5);
+  --shadow-glow:            0 0 0 1px rgba(124,255,57,0.15), 0 8px 30px rgba(124,255,57,0.15);
+
+  --ease:                  cubic-bezier(0.4,0,0.2,1);
+  --ease-spring:            cubic-bezier(0.34,1.56,0.64,1);
+}
+
+/* ==========================================================================
+   2. RESET & BASE
+   ========================================================================== */
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+
+html,body{
+  height:100%;
+  background:var(--bg);
+  color:var(--text-primary);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  overflow-x:hidden;
+}
+
+body{
+  background:
+    radial-gradient(circle at 15% 0%, rgba(124,255,57,0.06) 0%, transparent 45%),
+    radial-gradient(circle at 90% 20%, rgba(124,255,57,0.04) 0%, transparent 40%),
+    var(--bg);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+}
+
+button{ font-family:inherit; border:none; background:none; color:inherit; cursor:pointer; }
+img{ display:block; max-width:100%; }
+a{ color:inherit; text-decoration:none; }
+
+::-webkit-scrollbar{ display:none; }
+*{ scrollbar-width:none; }
+
+/* ==========================================================================
+   3. APP SHELL
+   ========================================================================== */
+.app{
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg);
+  overflow:hidden;
+}
+
+.page{
+  flex:1;
+  padding:18px 18px 100px;
+  display:none;
+  animation:pageIn .38s var(--ease);
+}
+.page.active{ display:block; }
+
+@keyframes pageIn{
+  from{ opacity:0; transform:translateY(14px) scale(.99); }
+  to{ opacity:1; transform:translateY(0) scale(1); }
+}
+
+/* ==========================================================================
+   4. TOP APP BAR (Game History / More)
+   ========================================================================== */
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:20px;
+}
+.topbar-title-wrap{ display:flex; align-items:center; gap:12px; }
+.topbar-icon{
+  width:42px; height:42px;
+  border-radius:var(--radius-sm);
+  background:var(--glass);
+  border:1px solid var(--card-border);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--accent);
+  font-size:16px;
+}
+.topbar-title{ font-size:22px; font-weight:800; letter-spacing:-0.3px; }
+.topbar-subtitle{ font-size:12.5px; color:var(--text-secondary); font-weight:500; margin-top:2px; }
+.topbar-actions{ display:flex; gap:10px; }
+.icon-btn{
+  width:42px; height:42px;
+  border-radius:var(--radius-sm);
+  background:var(--glass);
+  border:1px solid var(--card-border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:15px;
+  color:var(--text-primary);
+  transition:transform .18s var(--ease), background .18s var(--ease), border-color .18s var(--ease);
+  position:relative;
+  overflow:hidden;
+}
+.icon-btn:active{ transform:scale(0.9); background:var(--glass-strong); }
+
+/* ==========================================================================
+   5. RIPPLE EFFECT
+   ========================================================================== */
+.ripple{ position:relative; overflow:hidden; }
+.ripple-circle{
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,255,255,0.25);
+  transform:scale(0);
+  animation:rippleAnim .55s var(--ease);
+  pointer-events:none;
+}
+@keyframes rippleAnim{
+  to{ transform:scale(2.6); opacity:0; }
+}
+
+/* ==========================================================================
+   6. HOME — PROFILE HEADER
+   ========================================================================== */
+.profile-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:20px;
+}
+.profile-left{ display:flex; align-items:center; gap:14px; }
+
+.avatar-ring{
+  width:64px; height:64px;
+  border-radius:50%;
+  padding:3px;
+  background:conic-gradient(var(--accent), #3a8f1a, var(--accent));
+  display:flex; align-items:center; justify-content:center;
+  position:relative;
+  flex-shrink:0;
+}
+.avatar-ring img{
+  width:100%; height:100%;
+  border-radius:50%;
+  border:2px solid var(--bg);
+  object-fit:cover;
+}
+.avatar-ring .online-dot{
+  position:absolute;
+  bottom:1px; right:1px;
+  width:14px; height:14px;
+  background:var(--accent);
+  border:3px solid var(--bg);
+  border-radius:50%;
+}
+
+.profile-name-row{ display:flex; align-items:center; gap:6px; }
+.profile-name{ font-size:19px; font-weight:800; letter-spacing:-0.3px; }
+.verified-badge{
+  color:var(--accent);
+  font-size:15px;
+  filter:drop-shadow(0 0 6px var(--accent-glow));
+}
+.profile-loc{
+  display:flex; align-items:center; gap:6px;
+  font-size:12.5px; color:var(--text-secondary);
+  font-weight:500;
+  margin-top:3px;
+}
+.flag-emoji{ font-size:13px; }
+
+.profile-right{ display:flex; align-items:center; gap:10px; }
+.coin-pill{
+  display:flex; align-items:center; gap:7px;
+  background:var(--glass);
+  border:1px solid var(--card-border);
+  padding:7px 8px 7px 10px;
+  border-radius:var(--radius-pill);
+}
+.coin-pill i{ color:#FFC531; font-size:13px; }
+.coin-pill span{ font-size:13.5px; font-weight:700; }
+.coin-pill .plus-btn{
+  width:20px; height:20px;
+  background:var(--accent);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  color:#0A0B0F;
+  font-size:11px;
+  font-weight:800;
+}
+.bell-btn{
+  width:40px; height:40px;
+  border-radius:50%;
+  background:var(--glass);
+  border:1px solid var(--card-border);
+  display:flex; align-items:center; justify-content:center;
+  position:relative;
+  font-size:15px;
+}
+.bell-btn .dot{
+  position:absolute; top:9px; right:10px;
+  width:7px; height:7px;
+  background:var(--accent);
+  border-radius:50%;
+  box-shadow:0 0 6px var(--accent-glow);
+}
+
+/* Stat strip under avatar: rating / winrate / streak */
+.profile-stats-strip{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin:14px 0 10px;
+  flex-wrap:wrap;
+}
+.pstat{ display:flex; align-items:center; gap:6px; font-size:13px; font-weight:700; }
+.pstat i{ font-size:13px; }
+.pstat.rating i{ color:#FFC531; }
+.pstat.winrate i{ color:var(--accent); }
+.pstat.streak i{ color:#FF7A1A; }
+.pstat .lbl{ font-size:10.5px; color:var(--text-tertiary); font-weight:600; text-transform:uppercase; letter-spacing:.4px; margin-left:2px; }
+
+/* Level progress bar */
+.level-card{
+  display:flex; align-items:center; gap:12px;
+  margin-bottom:22px;
+}
+.level-shield{
+  width:38px; height:38px;
+  background:var(--accent-soft);
+  border:1px solid rgba(124,255,57,0.25);
+  border-radius:var(--radius-sm);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  color:var(--accent);
+  flex-shrink:0;
+}
+.level-shield i{ font-size:12px; }
+.level-shield span{ font-size:9px; font-weight:800; }
+.level-progress-wrap{ flex:1; }
+.level-progress-top{ display:flex; justify-content:space-between; font-size:11.5px; font-weight:600; color:var(--text-secondary); margin-bottom:6px; }
+.level-progress-bar{
+  height:7px;
+  background:var(--glass);
+  border-radius:var(--radius-pill);
+  overflow:hidden;
+  position:relative;
+}
+.level-progress-fill{
+  height:100%;
+  border-radius:var(--radius-pill);
+  background:linear-gradient(90deg, var(--accent-dim), var(--accent));
+  width:0%;
+  box-shadow:0 0 10px var(--accent-glow);
+  transition:width 1.1s var(--ease-spring);
+}
+
+/* ==========================================================================
+   7. DAILY CHALLENGE BANNER
+   ========================================================================== */
+.daily-banner{
+  position:relative;
+  border-radius:var(--radius-xl);
+  padding:20px;
+  margin-bottom:18px;
+  overflow:hidden;
+  background:linear-gradient(135deg, #1c3a10 0%, #0f2408 55%, #0A0B0F 100%);
+  border:1px solid rgba(124,255,57,0.18);
+  box-shadow:var(--shadow-card);
+  cursor:pointer;
+  transition:transform .25s var(--ease);
+}
+.daily-banner:active{ transform:scale(0.98); }
+.daily-banner::before{
+  content:'';
+  position:absolute; inset:0;
+  background:radial-gradient(circle at 85% 30%, rgba(124,255,57,0.25), transparent 55%);
+  pointer-events:none;
+}
+.daily-chip{
+  display:inline-flex; align-items:center; gap:6px;
+  background:rgba(124,255,57,0.15);
+  border:1px solid rgba(124,255,57,0.3);
+  padding:5px 11px;
+  border-radius:var(--radius-pill);
+  font-size:10.5px; font-weight:800;
+  letter-spacing:.6px;
+  color:var(--accent);
+  text-transform:uppercase;
+  margin-bottom:12px;
+}
+.daily-title{ font-size:19px; font-weight:800; max-width:70%; line-height:1.25; margin-bottom:14px; letter-spacing:-0.2px; }
+.daily-meta{ display:flex; align-items:center; gap:14px; }
+.daily-meta-item{ display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:var(--text-primary); }
+.daily-meta-item i{ font-size:12px; color:var(--accent); }
+.daily-chess-art{
+  position:absolute;
+  right:14px; bottom:10px;
+  font-size:78px;
+  color:rgba(124,255,57,0.16);
+  transform:rotate(-8deg);
+  line-height:1;
+}
+.daily-arrow{
+  position:absolute; right:18px; top:18px;
+  width:34px; height:34px;
+  border-radius:50%;
+  background:var(--accent);
+  color:#0A0B0F;
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px;
+  box-shadow:0 4px 14px var(--accent-glow);
+}
+
+/* ==========================================================================
+   8. ACTION CARDS ROW
+   ========================================================================== */
+.actions-row{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:18px;
+}
+.action-card{
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-md);
+  padding:16px 8px 14px;
+  display:flex; flex-direction:column; align-items:center; gap:9px;
+  text-align:center;
+  transition:transform .2s var(--ease), border-color .2s var(--ease), background .2s var(--ease);
+  position:relative;
+  overflow:hidden;
+}
+.action-card:active{ transform:translateY(2px) scale(0.97); background:var(--glass-strong); }
+.action-icon{
+  width:42px; height:42px;
+  border-radius:var(--radius-sm);
+  display:flex; align-items:center; justify-content:center;
+  font-size:17px;
+}
+.action-card.quick .action-icon{ background:var(--accent-soft); color:var(--accent); }
+.action-card.friends .action-icon{ background:rgba(255,197,49,0.12); color:var(--yellow); }
+.action-card.bot .action-icon{ background:rgba(90,140,255,0.14); color:#5A8CFF; }
+.action-label{ font-size:12.5px; font-weight:700; }
+.action-sub{ font-size:10px; color:var(--text-tertiary); font-weight:500; }
+
+/* ==========================================================================
+   9. STATS ROW (4-up)
+   ========================================================================== */
+.stats-row{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:9px;
+  margin-bottom:20px;
+}
+.stat-box{
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-md);
+  padding:13px 6px;
+  text-align:center;
+  transition:transform .2s var(--ease);
+}
+.stat-box:active{ transform:scale(0.95); }
+.stat-icon{ font-size:14px; margin-bottom:7px; }
+.stat-icon.games{ color:var(--accent); }
+.stat-icon.wins{ color:var(--accent); }
+.stat-icon.losses{ color:var(--red); }
+.stat-icon.streak{ color:#FFC531; }
+.stat-num{ font-size:16.5px; font-weight:800; letter-spacing:-0.3px; }
+.stat-lbl{ font-size:9.5px; color:var(--text-tertiary); font-weight:600; text-transform:uppercase; letter-spacing:.3px; margin-top:2px; }
+
+/* ==========================================================================
+   10. SECTION HEADER (shared)
+   ========================================================================== */
+.section-header{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:12px;
+}
+.section-title{ font-size:14.5px; font-weight:800; color:var(--text-primary); letter-spacing:.2px; }
+.section-title.green{ color:var(--accent); }
+.section-link{ font-size:12px; font-weight:700; color:var(--text-secondary); display:flex; align-items:center; gap:4px; }
+.section-link i{ font-size:10px; }
+
+/* ==========================================================================
+   11. CONTINUE GAME CARD
+   ========================================================================== */
+.continue-card{
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-lg);
+  padding:14px;
+  display:flex; align-items:center; gap:13px;
+  margin-bottom:20px;
+  box-shadow:var(--shadow-card);
+}
+.mini-board{
+  width:58px; height:58px;
+  border-radius:var(--radius-sm);
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  grid-template-rows:repeat(4,1fr);
+  flex-shrink:0;
+  border:1px solid var(--card-border-strong);
+}
+.mini-board .sq{ width:100%; height:100%; }
+.mini-board .sq.light{ background:#2b2f38; }
+.mini-board .sq.dark{ background:#181a20; }
+.mini-board .sq.piece{ display:flex; align-items:center; justify-content:center; font-size:11px; }
+.mini-board .sq.piece.white{ color:#eef0f4; }
+.mini-board .sq.piece.black{ color:#7CFF39; }
+
+.continue-info{ flex:1; min-width:0; }
+.continue-vs{ font-size:12px; color:var(--text-tertiary); font-weight:600; }
+.continue-name{ font-size:14.5px; font-weight:700; margin:2px 0 5px; }
+.continue-meta{ display:flex; align-items:center; gap:8px; font-size:11.5px; color:var(--text-secondary); font-weight:500; margin-bottom:4px; }
+.continue-meta i{ font-size:10px; color:var(--accent); }
+.continue-move{ font-size:11.5px; color:var(--accent); font-weight:700; }
+
+.btn-continue{
+  background:var(--accent);
+  color:#0A0B0F;
+  font-weight:800;
+  font-size:12.5px;
+  padding:11px 16px;
+  border-radius:var(--radius-sm);
+  white-space:nowrap;
+  box-shadow:0 6px 16px var(--accent-glow);
+  transition:transform .18s var(--ease);
+  flex-shrink:0;
+}
+.btn-continue:active{ transform:scale(0.94); }
+
+/* ==========================================================================
+   12. RECENT GAMES LIST (home) & HISTORY LIST (page 2) — shared row style
+   ========================================================================== */
+.game-row{
+  display:flex; align-items:center; gap:12px;
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-md);
+  padding:12px 13px;
+  margin-bottom:9px;
+  position:relative;
+  overflow:hidden;
+  transition:transform .18s var(--ease), background .18s var(--ease);
+}
+.game-row:active{ transform:scale(0.98); background:var(--glass-strong); }
+.game-row::before{
+  content:'';
+  position:absolute; left:0; top:0; bottom:0;
+  width:3px;
+}
+.game-row.win::before{ background:var(--accent); }
+.game-row.loss::before{ background:var(--red); }
+.game-row.draw::before{ background:var(--yellow); }
+
+.result-badge{
+  width:34px; height:34px;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px;
+  flex-shrink:0;
+}
+.result-badge.win{ background:var(--accent-soft); color:var(--accent); }
+.result-badge.loss{ background:var(--red-soft); color:var(--red); }
+.result-badge.draw{ background:var(--yellow-soft); color:var(--yellow); }
+
+.row-avatar{ position:relative; flex-shrink:0; }
+.row-avatar img{ width:42px; height:42px; border-radius:50%; object-fit:cover; border:2px solid var(--card-border-strong); }
+.row-avatar .ring{ position:absolute; inset:-2px; border-radius:50%; border:2px solid; }
+.row-avatar.win .ring{ border-color:var(--accent); }
+.row-avatar.loss .ring{ border-color:var(--red); }
+.row-avatar.draw .ring{ border-color:var(--yellow); }
+
+.row-info{ flex:1; min-width:0; }
+.row-name-line{ display:flex; align-items:center; gap:6px; }
+.row-name{ font-size:14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.row-sub{ display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--text-secondary); font-weight:500; margin-top:3px; }
+.row-sub i{ font-size:9.5px; color:var(--text-tertiary); }
+
+.row-right{ display:flex; flex-direction:column; align-items:flex-end; gap:5px; flex-shrink:0; }
+.result-tag{
+  font-size:10.5px; font-weight:800; letter-spacing:.4px; text-transform:uppercase;
+  padding:3px 9px; border-radius:var(--radius-pill);
+}
+.result-tag.win{ background:var(--accent-soft); color:var(--accent); }
+.result-tag.loss{ background:var(--red-soft); color:var(--red); }
+.result-tag.draw{ background:var(--yellow-soft); color:var(--yellow); }
+.row-time{ font-size:10.5px; color:var(--text-tertiary); font-weight:600; }
+.row-chevron{ color:var(--text-tertiary); font-size:12px; margin-left:2px; }
+
+/* Home-page compact recent-game variant */
+.recent-row{
+  display:flex; align-items:center; gap:12px;
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-md);
+  padding:11px 13px;
+  margin-bottom:9px;
+  transition:transform .18s var(--ease);
+}
+.recent-row:active{ transform:scale(0.98); }
+.recent-trophy{
+  width:32px; height:32px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px;
+  flex-shrink:0;
+}
+.recent-trophy.win{ background:var(--accent-soft); color:var(--accent); }
+.recent-trophy.loss{ background:var(--red-soft); color:var(--red); }
+.recent-row img{ width:38px; height:38px; border-radius:50%; object-fit:cover; flex-shrink:0; }
+.recent-info{ flex:1; min-width:0; }
+.recent-vs{ font-size:13.5px; font-weight:700; }
+.recent-meta{ font-size:11px; color:var(--text-secondary); font-weight:500; margin-top:2px; }
+.recent-right{ text-align:right; flex-shrink:0; }
+.recent-diff{ font-size:13px; font-weight:800; }
+.recent-diff.pos{ color:var(--accent); }
+.recent-diff.neg{ color:var(--red); }
+.recent-rating{ font-size:10.5px; color:var(--text-tertiary); font-weight:600; margin-top:2px; }
+.recent-ago{ font-size:10px; color:var(--text-tertiary); margin-top:2px; }
+
+/* ==========================================================================
+   13. FRIENDS ONLINE — horizontal scroll
+   ========================================================================== */
+.friends-scroll{
+  display:flex;
+  gap:14px;
+  overflow-x:auto;
+  padding:2px 2px 8px;
+  margin-bottom:6px;
+}
+.friend-item{
+  display:flex; flex-direction:column; align-items:center; gap:7px;
+  flex-shrink:0;
+  width:60px;
+}
+.friend-avatar-wrap{ position:relative; }
+.friend-avatar-wrap img{
+  width:54px; height:54px; border-radius:50%; object-fit:cover;
+  border:2px solid var(--card-border-strong);
+}
+.friend-avatar-wrap .online{
+  position:absolute; bottom:1px; right:1px;
+  width:13px; height:13px;
+  background:var(--accent);
+  border:2.5px solid var(--bg);
+  border-radius:50%;
+}
+.friend-name{ font-size:11px; font-weight:600; color:var(--text-primary); white-space:nowrap; }
+.friend-rating{ font-size:10px; color:var(--text-tertiary); font-weight:600; }
+.friend-add{
+  width:54px; height:54px; border-radius:50%;
+  border:1.5px dashed var(--card-border-strong);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--text-secondary);
+  font-size:16px;
+}
+
+/* ==========================================================================
+   14. GAME HISTORY PAGE — filters, stat cards, list, bottom stats
+   ========================================================================== */
+.filter-tabs{
+  display:flex;
+  gap:8px;
+  margin-bottom:16px;
+  overflow-x:auto;
+}
+.filter-tab{
+  padding:10px 18px;
+  border-radius:var(--radius-pill);
+  font-size:12.5px;
+  font-weight:700;
+  white-space:nowrap;
+  background:var(--glass);
+  border:1px solid var(--card-border);
+  color:var(--text-secondary);
+  transition:all .2s var(--ease);
+  display:flex; align-items:center; gap:6px;
+}
+.filter-tab.active{
+  background:var(--accent);
+  color:#0A0B0F;
+  border-color:var(--accent);
+  box-shadow:0 4px 14px var(--accent-glow);
+}
+.filter-tab i{ font-size:11px; }
+
+.hist-stats-row{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:9px;
+  margin-bottom:20px;
+}
+.hist-stat{
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-md);
+  padding:14px 6px;
+  text-align:center;
+}
+.hist-stat-icon{ font-size:15px; margin-bottom:8px; }
+.hist-stat-num{ font-size:18px; font-weight:800; letter-spacing:-.3px; }
+.hist-stat-lbl{ font-size:10px; color:var(--text-tertiary); font-weight:600; margin-top:3px; }
+
+.day-divider{
+  font-size:11.5px;
+  font-weight:700;
+  color:var(--text-tertiary);
+  text-transform:uppercase;
+  letter-spacing:.6px;
+  margin:18px 0 10px;
+}
+.day-divider:first-of-type{ margin-top:0; }
+
+.bottom-stats-card{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-lg);
+  padding:18px 8px;
+  margin-top:16px;
+}
+.bstat{ text-align:center; display:flex; flex-direction:column; align-items:center; gap:8px; border-right:1px solid var(--card-border); }
+.bstat:last-child{ border-right:none; }
+.bstat-icon{
+  width:34px; height:34px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px;
+}
+.bstat-icon.fire{ background:rgba(255,122,26,0.12); color:#FF7A1A; }
+.bstat-icon.rating{ background:var(--accent-soft); color:var(--accent); }
+.bstat-icon.time{ background:rgba(90,140,255,0.12); color:#5A8CFF; }
+.bstat-num{ font-size:15px; font-weight:800; }
+.bstat-lbl{ font-size:9.5px; color:var(--text-tertiary); font-weight:600; text-align:center; line-height:1.3; }
+
+/* ==========================================================================
+   15. MORE PAGE
+   ========================================================================== */
+.more-profile-card{
+  display:flex; align-items:center; gap:14px;
+  background:linear-gradient(135deg, rgba(124,255,57,0.1), rgba(124,255,57,0.02));
+  border:1px solid rgba(124,255,57,0.18);
+  border-radius:var(--radius-lg);
+  padding:16px;
+  margin-bottom:22px;
+}
+.more-profile-card img{ width:56px; height:56px; border-radius:50%; object-fit:cover; border:2px solid var(--accent); }
+.more-profile-name{ font-size:16px; font-weight:800; display:flex; align-items:center; gap:6px; }
+.more-profile-sub{ font-size:12px; color:var(--text-secondary); font-weight:500; margin-top:3px; }
+.more-profile-arrow{ margin-left:auto; color:var(--text-tertiary); }
+
+.more-group-title{
+  font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
+  color:var(--text-tertiary); margin:20px 0 10px 4px;
+}
+.more-group-title:first-of-type{ margin-top:0; }
+
+.more-list{
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+}
+.more-item{
+  display:flex; align-items:center; gap:13px;
+  padding:14px 16px;
+  border-bottom:1px solid var(--card-border);
+  transition:background .18s var(--ease);
+}
+.more-item:last-child{ border-bottom:none; }
+.more-item:active{ background:var(--glass-strong); }
+.more-icon{
+  width:36px; height:36px; border-radius:var(--radius-sm);
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px;
+  flex-shrink:0;
+}
+.more-label{ flex:1; font-size:14px; font-weight:600; }
+.more-item .fa-chevron-right{ font-size:11px; color:var(--text-tertiary); }
+.more-item.logout .more-label{ color:var(--red); }
+.more-item.logout .more-icon{ background:var(--red-soft); color:var(--red); }
+
+.more-icon.i1{ background:var(--accent-soft); color:var(--accent); }
+.more-icon.i2{ background:rgba(255,197,49,0.12); color:var(--yellow); }
+.more-icon.i3{ background:rgba(90,140,255,0.12); color:#5A8CFF; }
+.more-icon.i4{ background:rgba(190,120,255,0.12); color:#BE78FF; }
+.more-icon.i5{ background:rgba(255,255,255,0.08); color:var(--text-secondary); }
+.more-icon.i6{ background:rgba(255,122,26,0.12); color:#FF7A1A; }
+.more-icon.i7{ background:rgba(90,200,255,0.12); color:#5AC8FF; }
+.more-icon.i8{ background:rgba(255,255,255,0.08); color:var(--text-secondary); }
+.more-icon.i9{ background:rgba(255,255,255,0.08); color:var(--text-secondary); }
+.more-icon.i10{ background:rgba(255,255,255,0.08); color:var(--text-secondary); }
+
+.app-version{ text-align:center; font-size:11px; color:var(--text-tertiary); font-weight:600; margin:22px 0 4px; }
+
+/* ==========================================================================
+   16. BOTTOM NAVIGATION
+   ========================================================================== */
+.bottom-nav{
+  position:absolute;
+  left:0; right:0; bottom:0;
+  height:78px;
+  padding-bottom:14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-around;
+  background:rgba(10,11,15,0.85);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  border-top:1px solid var(--card-border);
+  z-index:50;
+}
+.nav-item{
+  display:flex; flex-direction:column; align-items:center; gap:5px;
+  color:var(--text-tertiary);
+  font-size:10.5px;
+  font-weight:600;
+  padding:8px 22px;
+  border-radius:var(--radius-sm);
+  transition:color .2s var(--ease);
+  position:relative;
+}
+.nav-item i{ font-size:18px; transition:transform .3s var(--ease-spring); }
+.nav-item.active{ color:var(--accent); }
+.nav-item.active i{ transform:translateY(-2px); }
+.nav-item.active::before{
+  content:'';
+  position:absolute;
+  top:-2px;
+  width:5px; height:5px;
+  background:var(--accent);
+  border-radius:50%;
+  box-shadow:0 0 8px var(--accent-glow);
+  animation:navDot .3s var(--ease-spring);
+}
+@keyframes navDot{
+  from{ transform:scale(0); opacity:0; }
+  to{ transform:scale(1); opacity:1; }
+}
+
+/* ==========================================================================
+   17. STATUS BAR (decorative, mimics phone)
+   ========================================================================== */
+.statusbar{
+  height:0;
+}
+
+/* ==========================================================================
+   18. RESPONSIVE
+   ========================================================================== */
+@media (max-width:370px){
+  .actions-row{ gap:7px; }
+  .stats-row{ gap:6px; }
+  .daily-title{ font-size:17px; }
+}
+
+/* Fade-in stagger for list items */
+.stagger > *{ animation:itemIn .4s var(--ease) backwards; }
+.stagger > *:nth-child(1){ animation-delay:.02s; }
+.stagger > *:nth-child(2){ animation-delay:.06s; }
+.stagger > *:nth-child(3){ animation-delay:.10s; }
+.stagger > *:nth-child(4){ animation-delay:.14s; }
+.stagger > *:nth-child(5){ animation-delay:.18s; }
+.stagger > *:nth-child(6){ animation-delay:.22s; }
+.stagger > *:nth-child(7){ animation-delay:.26s; }
+.stagger > *:nth-child(8){ animation-delay:.30s; }
+@keyframes itemIn{
+  from{ opacity:0; transform:translateY(10px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+
+/* ============================================================
+   MOBILE-RESPONSIVE OVERRIDES — Imported separately
+   See mobile-responsive.css for full mobile implementations
+   ============================================================ */
+/* The mobile-responsive.css file should be imported AFTER design.css */
+

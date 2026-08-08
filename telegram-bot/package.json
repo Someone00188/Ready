@@ -1,0 +1,26 @@
+{
+  "name": "shaxmat-telegram-bot",
+  "version": "1.0.0",
+  "description": "Shaxmat Telegram Bot - Real-time Chess",
+  "main": "bot.js",
+  "type": "module",
+  "scripts": {
+    "start": "node bot.js",
+    "dev": "nodemon bot.js"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "chess",
+    "shaxmat"
+  ],
+  "author": "Samandar",
+  "license": "MIT",
+  "dependencies": {
+    "telegraf": "^4.14.1",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

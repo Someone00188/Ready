@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shaxmat Doskasi</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Arial', sans-serif;
+      padding: 20px;
+    }
+    .container {
+      text-align: center;
+    }
+    h1 {
+      color: white;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .board-wrapper {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(8, 1fr);
+      gap: 0;
+      width: 100%;
+      max-width: 500px;
+      aspect-ratio: 1/1;
+      border: 3px solid #333;
+      margin: 0 auto;
+    }
+    .square {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3em;
+      cursor: pointer;
+      border: 1px solid rgba(0,0,0,0.1);
+      transition: all 0.3s;
+      user-select: none;
+    }
+    .square:hover {
+      transform: scale(1.05);
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+    }
+    .square.light {
+      background: #f0d9b5;
+    }
+    .square.dark {
+      background: #b58863;
+    }
+    .piece {
+      cursor: grab;
+      transition: all 0.2s;
+    }
+    .piece:active {
+      cursor: grabbing;
+      filter: brightness(1.2);
+    }
+    .info {
+      color: white;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    button:hover {
+      background: #764ba2;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>♟ SHAXMAT DOSKASI ♞</h1>
+    <div class="board-wrapper">
+      <div class="board" id="board"></div>
+    </div>
+    <div class="controls">
+      <button onclick="resetBoard()">🔄 Qayta boshlash</button>
+      <button onclick="toggleOrientation()">🔁 Aylantirib ko'rish</button>
+    </div>
+    <div class="info">
+      <p>👆 To'shlarni suring va harakatlantiring</p>
+      <p id="status"></p>
+    </div>
+  </div>
+
+  <script>
+    // Shaxmat to'shlarining boshi (Unicode)
+    const pieces = {
+      'K': '♔', 'Q': '♕', 'R': '♖', 'B': '♗', 'N': '♘', 'P': '♙', // Oq to'shlar
+      'k': '♚', 'q': '♛', 'r': '♜', 'b': '♝', 'n': '♞', 'p': '♟'  // Qora to'shlar
+    };
+
+    // Boshlang'ich FEN pozitsiyasi (standard shaxmat)
+    const initialFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
+    
+    let boardData = [];
+    let selectedSquare = null;
+    let flipped = false;
+    let draggedPiece = null;
+
+    // Doskani HTML'da yaratish
+    function createBoard() {
+      const board = document.getElementById('board');
+      board.innerHTML = '';
+      
+      for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+          const square = document.createElement('div');
+          const isLight = (row + col) % 2 === 0;
+          square.className = `square ${isLight ? 'light' : 'dark'}`;
+          square.id = `sq-${row}-${col}`;
+          square.onclick = () => selectSquare(row, col);
+          
+          const piece = boardData[row][col];
+          if (piece !== '.') {
+            const pieceEl = document.createElement('span');
+            pieceEl.className = 'piece';
+            pieceEl.textContent = pieces[piece];
+            pieceEl.draggable = true;
+            pieceEl.ondragstart = (e) => dragStart(e, row, col);
+            pieceEl.ondragend = dragEnd;
+            square.appendChild(pieceEl);
+          }
+          
+          square.ondrop = (e) => dropPiece(e, row, col);
+          square.ondragover = (e) => e.preventDefault();
+          
+          board.appendChild(square);
+        }
+      }
+    }
+
+    // Boshlang'ich pozitsiyadan doskani to'ldirish
+    function loadFEN() {
+      boardData = [];
+      const rows = initialFEN.split('/');
+      
+      rows.forEach(row => {
+        let rowData = [];
+        for (let char of row) {
+          if (isNaN(char)) {
+            rowData.push(char);
+          } else {
+            for (let i = 0; i < parseInt(char); i++) {
+              rowData.push('.');
+            }
+          }
+        }
+        boardData.push(rowData);
+      });
+    }
+
+    function selectSquare(row, col) {
+      if (selectedSquare) {
+        document.getElementById(`sq-${selectedSquare[0]}-${selectedSquare[1]}`).style.boxShadow = 'none';
+      }
+      selectedSquare = [row, col];
+      document.getElementById(`sq-${row}-${col}`).style.boxShadow = 'inset 0 0 15px rgba(255, 193, 7, 0.5)';
+      updateStatus(`Tanlandi: [${String.fromCharCode(97 + col)}${8 - row}]`);
+    }
+
+    function dragStart(e, row, col) {
+      draggedPiece = { row, col, piece: boardData[row][col] };
+      e.dataTransfer.effectAllowed = 'move';
+      e.target.style.opacity = '0.5';
+    }
+
+    function dragEnd(e) {
+      e.target.style.opacity = '1';
+    }
+
+    function dropPiece(e, row, col) {
+      e.preventDefault();
+      if (draggedPiece) {
+        if (draggedPiece.row !== row || draggedPiece.col !== col) {
+          boardData[row][col] = draggedPiece.piece;
+          boardData[draggedPiece.row][draggedPiece.col] = '.';
+          updateStatus(`Harakati: ${pieces[draggedPiece.piece]} → [${String.fromCharCode(97 + col)}${8 - row}]`);
+        }
+        createBoard();
+      }
+      draggedPiece = null;
+    }
+
+    function resetBoard() {
+      loadFEN();
+      createBoard();
+      selectedSquare = null;
+      updateStatus('Doskasi qayta tiklandi');
+    }
+
+    function toggleOrientation() {
+      flipped = !flipped;
+      const board = document.getElementById('board');
+      board.style.transform = flipped ? 'rotate(180deg)' : 'rotate(0deg)';
+      updateStatus(flipped ? 'Aylantirildi' : 'Normal');
+    }
+
+    function updateStatus(msg) {
+      document.getElementById('status').textContent = msg;
+    }
+
+    // Boshlash
+    loadFEN();
+    createBoard();
+    updateStatus('To\'shlarni suring');
+  </script>
+</body>
+</html>
