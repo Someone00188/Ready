@@ -62,14 +62,26 @@ if (fs.existsSync(distDir)) {
   console.log('📦 Frontend tarqatilmoqda: ../frontend/dist');
 }
 
-// 404
-app.use((req, res) => res.status(404).json({ error: 'Topilmadi' }));
+// 404 va xatolar middleware'lari — bular MUHIM SABABGA KO'RA endi bu yerda
+// ro'yxatga OLINMAYDI. Ilgari shu joyda edilar (modul yuklanganda darhol), lekin
+// bot webhook route'i (`app.use(bot.webhookCallback(WEBHOOK_PATH))`) faqat
+// keyinroq, start() ichida, async ravishda qo'shiladi. Express middleware
+// tartibi ro'yxatga olinish tartibiga bog'liq — demak eski joylashuvda 404
+// handler bot route'idan OLDIN turar edi va Telegram'dan kelgan HAR BIR
+// webhook so'rovi (health/api'lardan farqli — ular ham shu yerdan oldin
+// ro'yxatga olingan) shu 404'ga tushib qolardi. Aynan shu sabab "404 Not Found"
+// xatosi Telegram tomonidan qaytarilayotgan edi.
+//
+// Yechim: bu ikkala handler endi funksiya ichiga o'ralgan va start() da,
+// webhook route qo'shilgach, chaqiriladi — pastdagi mountFallbackHandlers().
+function mountFallbackHandlers() {
+  app.use((req, res) => res.status(404).json({ error: 'Topilmadi' }));
 
-// Xatolar
-app.use((err, req, res, next) => {
-  console.error('Server xatosi:', err);
-  res.status(500).json({ error: config.NODE_ENV === 'production' ? 'Server xatosi' : err.message });
-});
+  app.use((err, req, res, next) => {
+    console.error('Server xatosi:', err);
+    res.status(500).json({ error: config.NODE_ENV === 'production' ? 'Server xatosi' : err.message });
+  });
+}
 
 // start-combined.js webhook o'rnatilgach shu yerga qo'l tegizadi (bot.js ni
 // import qilib, app'ga webhookCallback qo'shadi). server.js yolg'iz ishga
@@ -106,6 +118,12 @@ export async function start() {
       console.error('⚠️  Bot webhook o\'rnatilmadi:', err.message);
     }
   }
+
+  // 404/xato handler'lar ENG OXIRIDA ro'yxatga olinadi — webhook route
+  // (yuqorida) shu paytga qadar allaqachon qo'shilgan bo'lishi shart, aks
+  // holda Telegram'ning webhook so'rovi shu 404'ga tushib qoladi (aynan shu
+  // bug sabab "Wrong response from the webhook: 404 Not Found" xatosi kelgan).
+  mountFallbackHandlers();
 
   await new Promise((resolve) => {
     server.listen(config.PORT, () => {
