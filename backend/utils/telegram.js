@@ -3,18 +3,6 @@ import { config } from '../config.js';
 
 const API = (method) => `https://api.telegram.org/bot${config.TELEGRAM_TOKEN}/${method}`;
 
-const REASON_UZ = {
-  checkmate: 'Mat',
-  timeout: 'Vaqt tugadi',
-  resignation: 'Taslim',
-  draw: 'Durrang kelishuvi',
-  stalemate: 'Pat',
-  insufficient_material: 'Material yetarli emas',
-  threefold_repetition: 'Uch marta takrorlanish',
-  fifty_move_rule: '50 yurish qoidasi',
-  abandoned: 'Tark etilgan'
-};
-
 async function send(chatId, text, replyMarkup) {
   if (!config.TELEGRAM_TOKEN) return;
 
@@ -72,42 +60,6 @@ async function sendDocument(chatId, filePath, caption) {
   }
 
   throw lastErr; // barcha urinishlar tugadi — endi chinakam xato
-}
-
-/** O'yin tugagach ikkala o'yinchiga xabar yuboradi */
-export async function notifyGameOver(game, { whiteChange = 0, blackChange = 0 } = {}) {
-  if (!config.TELEGRAM_TOKEN) return;
-
-  const reason = REASON_UZ[game.reason] || game.reason;
-  const viewUrl = `${config.FRONTEND_URL}/game/${game.id}?spectate=1`;
-  const markup = {
-    inline_keyboard: [[{ text: "👁 O'yinni ko'rish", url: viewUrl }]]
-  };
-
-  const build = (outcome, change, oppName) => {
-    const head = outcome === 'win' ? '🎉 <b>Siz yutdingiz!</b>'
-               : outcome === 'loss' ? '😔 <b>Siz yutqazdingiz.</b>'
-               : '🤝 <b>Durrang.</b>';
-    const ratingLine = change !== 0
-      ? `\n• Reyting: <b>${change > 0 ? '+' : ''}${change}</b>`
-      : '';
-    return `${head}\n\n• Raqib: ${oppName}\n• Sabab: ${reason}${ratingLine}`;
-  };
-
-  const tasks = [];
-
-  if (game.whiteId) {
-    const outcome = game.result === '1-0' ? 'win' : game.result === '0-1' ? 'loss' : 'draw';
-    tasks.push(send(game.whiteId, build(outcome, whiteChange, game.blackName), markup));
-  }
-
-  // AI o'yinida qora tomon uchun chat yo'q
-  if (game.blackId && !game.isAI) {
-    const outcome = game.result === '0-1' ? 'win' : game.result === '1-0' ? 'loss' : 'draw';
-    tasks.push(send(game.blackId, build(outcome, blackChange, game.whiteName), markup));
-  }
-
-  await Promise.allSettled(tasks);
 }
 
 /** Raqib qo'shilganda oq tomonga xabar */
