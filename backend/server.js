@@ -30,6 +30,11 @@ const io = new Server(server, {
   maxHttpBufferSize: 1e6
 });
 
+// admin.js (va boshqa route'lar) restore/backup kabi holatlarda ulangan
+// clientlarga real-vaqtda xabar berishi uchun `io`ga kirish kerak. Express'ning
+// standart usuli — app'ga saqlab, req.app.get('io') orqali olish.
+app.set('io', io);
+
 app.use(cors());
 app.use(express.json());
 
